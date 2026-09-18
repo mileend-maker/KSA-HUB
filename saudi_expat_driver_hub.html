@@ -1,0 +1,1697 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Saudi Expat & Driver Utility Hub</title>
+    <!-- Tailwind CSS CDN -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <!-- FontAwesome CDN -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <!-- Google Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&family=Tajawal:wght@400;700&display=swap" rel="stylesheet">
+    
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: {
+                        saudi: {
+                            green: '#006C35',
+                            gold: '#C5A059',
+                            dark: '#0A1E14',
+                            light: '#F0F7F4'
+                        }
+                    },
+                    fontFamily: {
+                        sans: ['Inter', 'sans-serif'],
+                        arabic: ['Tajawal', 'sans-serif']
+                    }
+                }
+            }
+        }
+    </script>
+    <style>
+        body {
+            font-family: 'Inter', sans-serif;
+            background-color: #f8fafc;
+        }
+        .arabic-text {
+            font-family: 'Tajawal', sans-serif;
+        }
+        .tab-content {
+            display: none;
+        }
+        .tab-content.active {
+            display: block;
+            animation: fadeIn 0.25s ease-in-out;
+        }
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(4px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+        /* Custom scrollbar */
+        ::-webkit-scrollbar {
+            width: 6px;
+            height: 6px;
+        }
+        ::-webkit-scrollbar-track {
+            background: #f1f5f9;
+        }
+        ::-webkit-scrollbar-thumb {
+            background: #cbd5e1;
+            border-radius: 9999px;
+        }
+        ::-webkit-scrollbar-thumb:hover {
+            background: #94a3b8;
+        }
+    </style>
+</head>
+<body class="bg-slate-50 text-slate-800 min-h-screen flex flex-col pb-20 md:pb-6">
+
+    <!-- Top Ad Arbitrage & Platform Status Bar -->
+    <div class="bg-slate-900 text-slate-300 text-xs py-1.5 px-4">
+        <div class="max-w-7xl mx-mx-auto flex flex-wrap justify-between items-center gap-2">
+            <div class="flex items-center gap-3">
+                <span class="inline-flex items-center gap-1.5 bg-emerald-950 text-emerald-400 border border-emerald-800/50 px-2 py-0.5 rounded-full font-mono text-[11px]">
+                    <span class="w-2 h-2 rounded-full bg-emerald-500 animate-pulse"></span> LIVE PLATFORM
+                </span>
+                <span class="hidden sm:inline text-slate-400">SAR / ER API Status: <strong class="text-emerald-400">100% Online</strong></span>
+            </div>
+            <div class="flex items-center gap-4 text-[11px]">
+                <span class="text-amber-400 font-semibold"><i class="fa-solid me-1 fa-chart-line"></i> Daily RPM: <span id="rpmCounter">SAR 14.80</span></span>
+                <button onclick="shareAppOnWhatsApp()" class="bg-emerald-600 hover:bg-emerald-500 text-white px-2.5 py-0.5 rounded font-medium transition-all flex items-center gap-1">
+                    <i class="fa-brands fa-whatsapp text-xs"></i> Share Hub
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Main Header -->
+    <header class="bg-gradient-to-r from-saudi-dark via-emerald-950 to-slate-900 text-white sticky top-0 z-40 shadow-md">
+        <div class="max-w-7xl mx-auto px-4 py-3 flex items-center justify-between">
+            <div class="flex items-center gap-3">
+                <div class="w-10 h-10 rounded-xl bg-saudi-green flex items-center justify-center text-white shadow-lg border border-emerald-400/30">
+                    <i class="fa-solid fa-kaaba text-xl"></i>
+                </div>
+                <div>
+                    <h1 class="font-bold text-lg leading-tight tracking-tight flex items-center gap-2">
+                        KSA Expat & Driver Hub
+                        <span class="bg-amber-500/20 text-amber-300 border border-amber-500/30 text-[10px] uppercase font-bold px-1.5 py-0.5 rounded">v3.0</span>
+                    </h1>
+                    <p class="text-xs text-emerald-200/80">Saudi Arabia Daily Utility & Operations Platform</p>
+                </div>
+            </div>
+            <div class="flex items-center gap-2">
+                <div class="text-right hidden sm:block">
+                    <p class="text-[11px] text-slate-400">Riyadh, KSA</p>
+                    <p class="text-xs font-semibold text-emerald-300" id="liveClock">--:--:-- SAR</p>
+                </div>
+            </div>
+        </div>
+
+        <!-- Sticky Desktop & Tablet Tab Navigation Bar -->
+        <nav class="bg-slate-900/95 backdrop-blur-md border-t border-slate-800 text-slate-300 text-xs overflow-x-auto">
+            <div class="max-w-7xl mx-auto px-2 flex whitespace-nowrap scrollbar-none">
+                <button onclick="switchTab('deals')" id="nav-deals" class="nav-tab px-4 py-3 font-semibold flex items-center gap-2 border-b-2 border-emerald-500 text-emerald-400 transition-all hover:text-white">
+                    <i class="fa-solid fa-store text-sm"></i>
+                    <span>Weekly Deals</span>
+                    <span class="bg-red-500 text-white text-[9px] px-1.5 py-0.2 rounded-full font-bold uppercase">Hot</span>
+                </button>
+                <button onclick="switchTab('remittance')" id="nav-remittance" class="nav-tab px-4 py-3 font-semibold flex items-center gap-2 border-b-2 border-transparent text-slate-400 transition-all hover:text-white">
+                    <i class="fa-solid fa-money-bill-transfer text-sm"></i>
+                    <span>Live Remittance</span>
+                </button>
+                <button onclick="switchTab('dallah')" id="nav-dallah" class="nav-tab px-4 py-3 font-semibold flex items-center gap-2 border-b-2 border-transparent text-slate-400 transition-all hover:text-white">
+                    <i class="fa-solid fa-id-card text-sm"></i>
+                    <span>Dallah Driving Exam</span>
+                </button>
+                <button onclick="switchTab('calculators')" id="nav-calculators" class="nav-tab px-4 py-3 font-semibold flex items-center gap-2 border-b-2 border-transparent text-slate-400 transition-all hover:text-white">
+                    <i class="fa-solid fa-calculator text-sm"></i>
+                    <span>EOSB & Fuel Calc</span>
+                </button>
+                <button onclick="switchTab('arabic')" id="nav-arabic" class="nav-tab px-4 py-3 font-semibold flex items-center gap-2 border-b-2 border-transparent text-slate-400 transition-all hover:text-white">
+                    <i class="fa-solid fa-comments text-sm"></i>
+                    <span>Survival Arabic</span>
+                </button>
+                <button onclick="switchTab('directory')" id="nav-directory" class="nav-tab px-4 py-3 font-semibold flex items-center gap-2 border-b-2 border-transparent text-slate-400 transition-all hover:text-white">
+                    <i class="fa-solid fa-building-columns text-sm"></i>
+                    <span>KSA Directory</span>
+                </button>
+            </div>
+        </nav>
+    </header>
+
+    <!-- Main Content Area -->
+    <main class="max-w-7xl mx-auto px-4 py-6 flex-1 w-full">
+
+        <!-- ========================================== -->
+        <!-- SECTION 1: WEEKLY DEALS & FLYERS (CLICKFLYER) -->
+        <!-- ========================================== -->
+        <section id="tab-deals" class="tab-content active space-y-6">
+            
+            <!-- Controls & Filters Header -->
+            <div class="bg-white rounded-2xl p-5 shadow-sm border border-slate-200/80 flex flex-col md:flex-row gap-4 items-center justify-between">
+                <div>
+                    <h2 class="text-xl font-bold text-slate-900 flex items-center gap-2">
+                        <i class="fa-solid fa-bag-shopping text-emerald-600"></i> ClickFlyer Weekly Offers
+                    </h2>
+                    <p class="text-xs text-slate-500 mt-1">Browse active supermarket leaflets & compare daily expat grocery staples across Saudi Arabia.</p>
+                </div>
+                <div class="flex flex-wrap items-center gap-3 w-full md:w-auto">
+                    <!-- City Selector -->
+                    <div class="relative flex-1 md:w-48">
+                        <label class="block text-[10px] font-bold text-slate-400 uppercase mb-1">Select City</label>
+                        <select id="cityFilter" onchange="filterFlyers()" class="w-full bg-slate-50 border border-slate-300 rounded-lg px-3 py-2 text-xs font-semibold text-slate-700 focus:ring-2 focus:ring-emerald-500 focus:outline-none">
+                            <option value="all"> Saudi Arabia (All)</option>
+                            <option value="riyadh" selected>Riyadh (الرياض)</option>
+                            <option value="jeddah">Jeddah (جدة)</option>
+                            <option value="dammam">Dammam / Khobar (الدمام)</option>
+                            <option value="makkah">Makkah & Madinah</option>
+                        </select>
+                    </div>
+                    <!-- Category Selector -->
+                    <div class="relative flex-1 md:w-48">
+                        <label class="block text-[10px] font-bold text-slate-400 uppercase mb-1">Category</label>
+                        <select id="categoryFilter" onchange="filterFlyers()" class="w-full bg-slate-50 border border-slate-300 rounded-lg px-3 py-2 text-xs font-semibold text-slate-700 focus:ring-2 focus:ring-emerald-500 focus:outline-none">
+                            <option value="all">All Retailers</option>
+                            <option value="hypermarket">Hypermarkets & Supermarkets</option>
+                            <option value="electronics">Electronics & Tech</option>
+                        </select>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Supermarket Leaflets Grid -->
+            <div id="flyersGrid" class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-5">
+                
+                <!-- HyperPanda Card -->
+                <div class="flyer-card bg-white rounded-2xl overflow-hidden shadow-sm border border-slate-200/80 hover:shadow-md transition-all flex flex-col" data-category="hypermarket" data-cities="riyadh,jeddah,dammam,makkah">
+                    <div class="relative bg-gradient-to-r from-emerald-600 to-teal-700 p-4 text-white">
+                        <span class="absolute top-3 right-3 bg-red-500 text-white text-[10px] font-bold px-2 py-0.5 rounded-full shadow">UP TO 50% OFF</span>
+                        <div class="flex items-center gap-3">
+                            <div class="w-12 h-12 bg-white rounded-xl flex items-center justify-center text-emerald-700 font-extrabold text-lg shadow">
+                                🐼
+                            </div>
+                            <div>
+                                <h3 class="font-bold text-lg">HyperPanda (بندة)</h3>
+                                <p class="text-xs text-emerald-100"><i class="fa-regular fa-clock me-1"></i> Valid till Tuesday</p>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="p-4 flex-1 flex flex-col justify-between space-y-4">
+                        <div class="space-y-2 text-xs text-slate-600">
+                            <div class="flex items-center justify-between border-b pb-1">
+                                <span>Featured Deals:</span>
+                                <span class="font-bold text-slate-800">Fresh Produce & Oils</span>
+                            </div>
+                            <div class="flex items-center justify-between border-b pb-1">
+                                <span>Active Pages:</span>
+                                <span class="font-bold text-emerald-600">28 Pages Leaflet</span>
+                            </div>
+                            <p class="text-[11px] text-slate-500 bg-slate-50 p-2 rounded border">Includes 10kg Rice discount, Sunflower Oil 2x1.5L bundle & fresh chicken promo.</p>
+                        </div>
+                        <button onclick="openLeafletModal('Panda Weekly Mega Deals', 4, 'Panda')" class="w-full bg-slate-900 hover:bg-emerald-700 text-white py-2.5 rounded-xl font-semibold text-xs transition-all flex items-center justify-center gap-2">
+                            <i class="fa-solid fa-book-open"></i> Browse Leaflet
+                        </button>
+                    </div>
+                </div>
+
+                <!-- LuLu Hypermarket Card -->
+                <div class="flyer-card bg-white rounded-2xl overflow-hidden shadow-sm border border-slate-200/80 hover:shadow-md transition-all flex flex-col" data-category="hypermarket" data-cities="riyadh,jeddah,dammam">
+                    <div class="relative bg-gradient-to-r from-emerald-700 to-green-800 p-4 text-white">
+                        <span class="absolute top-3 right-3 bg-amber-400 text-slate-900 text-[10px] font-extrabold px-2 py-0.5 rounded-full shadow">SUPER SAVINGS</span>
+                        <div class="flex items-center gap-3">
+                            <div class="w-12 h-12 bg-white rounded-xl flex items-center justify-center text-emerald-800 font-extrabold text-lg shadow">
+                                🛒
+                            </div>
+                            <div>
+                                <h3 class="font-bold text-lg">LuLu Hypermarket</h3>
+                                <p class="text-xs text-emerald-100"><i class="fa-regular fa-clock me-1"></i> Valid till Wednesday</p>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="p-4 flex-1 flex flex-col justify-between space-y-4">
+                        <div class="space-y-2 text-xs text-slate-600">
+                            <div class="flex items-center justify-between border-b pb-1">
+                                <span>Featured Deals:</span>
+                                <span class="font-bold text-slate-800">Expat Super Savings</span>
+                            </div>
+                            <div class="flex items-center justify-between border-b pb-1">
+                                <span>Active Pages:</span>
+                                <span class="font-bold text-emerald-600">32 Pages Leaflet</span>
+                            </div>
+                            <p class="text-[11px] text-slate-500 bg-slate-50 p-2 rounded border">Special discounts on South Asian & Asian spices, basmati rice & fresh meats.</p>
+                        </div>
+                        <button onclick="openLeafletModal('LuLu World Food Festival', 4, 'LuLu')" class="w-full bg-slate-900 hover:bg-emerald-700 text-white py-2.5 rounded-xl font-semibold text-xs transition-all flex items-center justify-center gap-2">
+                            <i class="fa-solid fa-book-open"></i> Browse Leaflet
+                        </button>
+                    </div>
+                </div>
+
+                <!-- Abdullah Al Othaim Card -->
+                <div class="flyer-card bg-white rounded-2xl overflow-hidden shadow-sm border border-slate-200/80 hover:shadow-md transition-all flex flex-col" data-category="hypermarket" data-cities="riyadh,jeddah,dammam,makkah">
+                    <div class="relative bg-gradient-to-r from-blue-700 to-indigo-800 p-4 text-white">
+                        <span class="absolute top-3 right-3 bg-amber-400 text-slate-900 text-[10px] font-bold px-2 py-0.5 rounded-full shadow">WHOLESALE PRICING</span>
+                        <div class="flex items-center gap-3">
+                            <div class="w-12 h-12 bg-white rounded-xl flex items-center justify-center text-blue-700 font-extrabold text-lg shadow">
+                                🌴
+                            </div>
+                            <div>
+                                <h3 class="font-bold text-lg">Al Othaim (العثيم)</h3>
+                                <p class="text-xs text-blue-100"><i class="fa-regular fa-clock me-1"></i> Fresh Every Monday</p>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="p-4 flex-1 flex flex-col justify-between space-y-4">
+                        <div class="space-y-2 text-xs text-slate-600">
+                            <div class="flex items-center justify-between border-b pb-1">
+                                <span>Featured Deals:</span>
+                                <span class="font-bold text-slate-800">Fresh Grocery & Fruits</span>
+                            </div>
+                            <div class="flex items-center justify-between border-b pb-1">
+                                <span>Active Pages:</span>
+                                <span class="font-bold text-blue-600">20 Pages Leaflet</span>
+                            </div>
+                            <p class="text-[11px] text-slate-500 bg-slate-50 p-2 rounded border">Lowest prices on tomatoes, potatoes, onions, dairy products & cooking oil.</p>
+                        </div>
+                        <button onclick="openLeafletModal('Al Othaim Weekly Promotions', 4, 'Othaim')" class="w-full bg-slate-900 hover:bg-emerald-700 text-white py-2.5 rounded-xl font-semibold text-xs transition-all flex items-center justify-center gap-2">
+                            <i class="fa-solid fa-book-open"></i> Browse Leaflet
+                        </button>
+                    </div>
+                </div>
+
+                <!-- Nesto Hypermarket Card -->
+                <div class="flyer-card bg-white rounded-2xl overflow-hidden shadow-sm border border-slate-200/80 hover:shadow-md transition-all flex flex-col" data-category="hypermarket" data-cities="riyadh,dammam">
+                    <div class="relative bg-gradient-to-r from-red-600 to-rose-700 p-4 text-white">
+                        <span class="absolute top-3 right-3 bg-yellow-300 text-slate-900 text-[10px] font-bold px-2 py-0.5 rounded-full shadow">WEEKEND FLASH</span>
+                        <div class="flex items-center gap-3">
+                            <div class="w-12 h-12 bg-white rounded-xl flex items-center justify-center text-red-600 font-extrabold text-lg shadow">
+                                🏬
+                            </div>
+                            <div>
+                                <h3 class="font-bold text-lg">Nesto Hypermarket</h3>
+                                <p class="text-xs text-red-100"><i class="fa-regular fa-clock me-1"></i> Valid 4 Days Only</p>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="p-4 flex-1 flex flex-col justify-between space-y-4">
+                        <div class="space-y-2 text-xs text-slate-600">
+                            <div class="flex items-center justify-between border-b pb-1">
+                                <span>Featured Deals:</span>
+                                <span class="font-bold text-slate-800">Expat Pantry Savings</span>
+                            </div>
+                            <div class="flex items-center justify-between border-b pb-1">
+                                <span>Active Pages:</span>
+                                <span class="font-bold text-red-600">16 Pages Leaflet</span>
+                            </div>
+                            <p class="text-[11px] text-slate-500 bg-slate-50 p-2 rounded border">Special budget deals on 10kg basmati rice bags, household cleaners & frozen food.</p>
+                        </div>
+                        <button onclick="openLeafletModal('Nesto Weekend Special Flyer', 4, 'Nesto')" class="w-full bg-slate-900 hover:bg-emerald-700 text-white py-2.5 rounded-xl font-semibold text-xs transition-all flex items-center justify-center gap-2">
+                            <i class="fa-solid fa-book-open"></i> Browse Leaflet
+                        </button>
+                    </div>
+                </div>
+
+                <!-- eXtra Electronics Card -->
+                <div class="flyer-card bg-white rounded-2xl overflow-hidden shadow-sm border border-slate-200/80 hover:shadow-md transition-all flex flex-col" data-category="electronics" data-cities="riyadh,jeddah,dammam,makkah">
+                    <div class="relative bg-gradient-to-r from-slate-800 to-blue-900 p-4 text-white">
+                        <span class="absolute top-3 right-3 bg-emerald-400 text-slate-900 text-[10px] font-bold px-2 py-0.5 rounded-full shadow">TECH DISCOUNTS</span>
+                        <div class="flex items-center gap-3">
+                            <div class="w-12 h-12 bg-white rounded-xl flex items-center justify-center text-blue-900 font-extrabold text-lg shadow">
+                                📱
+                            </div>
+                            <div>
+                                <h3 class="font-bold text-lg">eXtra Stores (إكسترا)</h3>
+                                <p class="text-xs text-slate-300"><i class="fa-regular fa-clock me-1"></i> Mega Price Lock</p>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="p-4 flex-1 flex flex-col justify-between space-y-4">
+                        <div class="space-y-2 text-xs text-slate-600">
+                            <div class="flex items-center justify-between border-b pb-1">
+                                <span>Featured Deals:</span>
+                                <span class="font-bold text-slate-800">Smartphones & TV</span>
+                            </div>
+                            <div class="flex items-center justify-between border-b pb-1">
+                                <span>Active Pages:</span>
+                                <span class="font-bold text-blue-600">24 Pages Leaflet</span>
+                            </div>
+                            <p class="text-[11px] text-slate-500 bg-slate-50 p-2 rounded border">0% Installment offers on Samsung, iPhone, Smart TVs, and AC units.</p>
+                        </div>
+                        <button onclick="openLeafletModal('eXtra Mega Electronics Deals', 4, 'eXtra')" class="w-full bg-slate-900 hover:bg-emerald-700 text-white py-2.5 rounded-xl font-semibold text-xs transition-all flex items-center justify-center gap-2">
+                            <i class="fa-solid fa-book-open"></i> Browse Leaflet
+                        </button>
+                    </div>
+                </div>
+
+                <!-- Carrefour KSA Card -->
+                <div class="flyer-card bg-white rounded-2xl overflow-hidden shadow-sm border border-slate-200/80 hover:shadow-md transition-all flex flex-col" data-category="hypermarket" data-cities="riyadh,jeddah font-sans">
+                    <div class="relative bg-gradient-to-r from-blue-600 to-indigo-700 p-4 text-white">
+                        <span class="absolute top-3 right-3 bg-red-500 text-white text-[10px] font-bold px-2 py-0.5 rounded-full shadow">MYCLUB REWARDS</span>
+                        <div class="flex items-center gap-3">
+                            <div class="w-12 h-12 bg-white rounded-xl flex items-center justify-center text-blue-600 font-extrabold text-lg shadow">
+                                🇫🇷
+                            </div>
+                            <div>
+                                <h3 class="font-bold text-lg">Carrefour (كارفور)</h3>
+                                <p class="text-xs text-blue-100"><i class="fa-regular fa-clock me-1"></i> Weekly Catalogue</p>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="p-4 flex-1 flex flex-col justify-between space-y-4">
+                        <div class="space-y-2 text-xs text-slate-600">
+                            <div class="flex items-center justify-between border-b pb-1">
+                                <span>Featured Deals:</span>
+                                <span class="font-bold text-slate-800">Family Food Savings</span>
+                            </div>
+                            <div class="flex items-center justify-between border-b pb-1">
+                                <span>Active Pages:</span>
+                                <span class="font-bold text-indigo-600">22 Pages Leaflet</span>
+                            </div>
+                            <p class="text-[11px] text-slate-500 bg-slate-50 p-2 rounded border">Imported cheeses, bakery treats, laundry detergents, and fresh meats.</p>
+                        </div>
+                        <button onclick="openLeafletModal('Carrefour KSA Weekly Offers', 4, 'Carrefour')" class="w-full bg-slate-900 hover:bg-emerald-700 text-white py-2.5 rounded-xl font-semibold text-xs transition-all flex items-center justify-center gap-2">
+                            <i class="fa-solid fa-book-open"></i> Browse Leaflet
+                        </button>
+                    </div>
+                </div>
+
+            </div>
+
+            <!-- Weekly Expat Staple Price Comparison Table -->
+            <div class="bg-white rounded-2xl p-5 shadow-sm border border-slate-200/80 space-y-4">
+                <div class="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-2 border-b pb-3">
+                    <div>
+                        <h3 class="text-base font-bold text-slate-900 flex items-center gap-2">
+                            <i class="fa-solid fa-scale-balanced text-amber-500"></i> Expat Weekly Staple Price Comparison
+                        </h3>
+                        <p class="text-xs text-slate-500">Live price breakdown of 4 essential daily staples across major stores in KSA (Prices in SAR).</p>
+                    </div>
+                    <span class="text-[11px] bg-emerald-50 text-emerald-700 border border-emerald-200 px-2.5 py-1 rounded-full font-semibold">
+                        <i class="fa-solid fa-check-circle me-1"></i> Highlighted = Cheapest Store
+                    </span>
+                </div>
+
+                <div class="overflow-x-auto">
+                    <table class="w-full text-left text-xs text-slate-700 border-collapse">
+                        <thead>
+                            <tr class="bg-slate-100 border-b border-slate-200 text-slate-700 font-bold uppercase text-[10px]">
+                                <th class="p-3">Essential Item</th>
+                                <th class="p-3 text-center">Panda</th>
+                                <th class="p-3 text-center">LuLu</th>
+                                <th class="p-3 text-center">Al Othaim</th>
+                                <th class="p-3 text-center">Nesto</th>
+                            </tr>
+                        </thead>
+                        <tbody class="divide-y divide-slate-100">
+                            <tr>
+                                <td class="p-3 font-semibold text-slate-900">
+                                    🌾 XL Basmati Rice Bag (10kg)
+                                </td>
+                                <td class="p-3 text-center">58.95 SAR</td>
+                                <td class="p-3 text-center bg-emerald-50 text-emerald-700 font-bold border border-emerald-300 rounded">52.50 SAR ⭐</td>
+                                <td class="p-3 text-center">54.95 SAR</td>
+                                <td class="p-3 text-center">53.95 SAR</td>
+                            </tr>
+                            <tr>
+                                <td class="p-3 font-semibold text-slate-900">
+                                    🌻 Sunflower Oil Bottle (1.5L)
+                                </td>
+                                <td class="p-3 text-center">14.50 SAR</td>
+                                <td class="p-3 text-center">15.25 SAR</td>
+                                <td class="p-3 text-center bg-emerald-50 text-emerald-700 font-bold border border-emerald-300 rounded">12.95 SAR ⭐</td>
+                                <td class="p-3 text-center">13.50 SAR</td>
+                            </tr>
+                            <tr>
+                                <td class="p-3 font-semibold text-slate-900">
+                                    🍗 Fresh Whole Chicken (1000g)
+                                </td>
+                                <td class="p-3 text-center bg-emerald-50 text-emerald-700 font-bold border border-emerald-300 rounded">15.95 SAR ⭐</td>
+                                <td class="p-3 text-center">16.50 SAR</td>
+                                <td class="p-3 text-center">16.95 SAR</td>
+                                <td class="p-3 text-center">16.25 SAR</td>
+                            </tr>
+                            <tr>
+                                <td class="p-3 font-semibold text-slate-900">
+                                    🥔 Fresh Potatoes & Tomatoes Pack (5kg)
+                                </td>
+                                <td class="p-3 text-center">12.00 SAR</td>
+                                <td class="p-3 text-center">11.50 SAR</td>
+                                <td class="p-3 text-center bg-emerald-50 text-emerald-700 font-bold border border-emerald-300 rounded">9.95 SAR ⭐</td>
+                                <td class="p-3 text-center">10.50 SAR</td>
+                            </tr>
+                        </tbody>
+                        <tfoot>
+                            <tr class="bg-slate-900 text-white font-bold">
+                                <td class="p-3">TOTAL BASKET COST</td>
+                                <td class="p-3 text-center">101.40 SAR</td>
+                                <td class="p-3 text-center">95.75 SAR</td>
+                                <td class="p-3 text-center text-amber-300 bg-slate-800">94.80 SAR (Cheapest)</td>
+                                <td class="p-3 text-center">94.20 SAR ⭐</td>
+                            </tr>
+                        </tfoot>
+                    </table>
+                </div>
+            </div>
+
+        </section>
+
+        <!-- ========================================== -->
+        <!-- SECTION 2: LIVE REMITTANCE RATE ENGINE -->
+        <!-- ========================================== -->
+        <section id="tab-remittance" class="tab-content space-y-6">
+            
+            <div class="bg-white rounded-2xl p-5 shadow-sm border border-slate-200/80 space-y-5">
+                <div class="flex flex-col md:flex-row justify-between items-start md:items-center gap-3 border-b pb-4">
+                    <div>
+                        <h2 class="text-xl font-bold text-slate-900 flex items-center gap-2">
+                            <i class="fa-solid fa-money-bill-transfer text-emerald-600"></i> Live Saudi Remittance Comparison
+                        </h2>
+                        <p class="text-xs text-slate-500 mt-1">Real-time exchange rates, transfer fees, 15% KSA VAT, and net payout calculator to home countries.</p>
+                    </div>
+                    <div id="apiStatusBadge" class="bg-emerald-50 border border-emerald-200 text-emerald-800 text-xs px-3 py-1.5 rounded-xl font-semibold flex items-center gap-2">
+                        <span class="w-2 h-2 rounded-full bg-emerald-500 animate-pulse"></span> Connected to Live SAR Rate API
+                    </div>
+                </div>
+
+                <!-- Amount & Currency Selector Controls -->
+                <div class="grid grid-cols-1 md:grid-cols-3 gap-4 bg-slate-50 p-4 rounded-xl border border-slate-200">
+                    <div>
+                        <label class="block text-xs font-bold text-slate-600 uppercase mb-1">Transfer Amount (SAR)</label>
+                        <div class="relative">
+                            <input type="number" id="remitAmount" value="1000" min="100" max="50000" oninput="calculateRemittance()" class="w-full bg-white border border-slate-300 rounded-lg px-3 py-2.5 font-bold text-slate-800 text-base focus:ring-2 focus:ring-emerald-500 focus:outline-none pl-12">
+                            <span class="absolute left-3 top-3 font-extrabold text-xs text-slate-400">SAR</span>
+                        </div>
+                    </div>
+
+                    <div>
+                        <label class="block text-xs font-bold text-slate-600 uppercase mb-1">Target Home Currency</label>
+                        <select id="targetCurrency" onchange="calculateRemittance()" class="w-full bg-white border border-slate-300 rounded-lg px-3 py-2.5 font-semibold text-slate-800 text-sm focus:ring-2 focus:ring-emerald-500 focus:outline-none">
+                            <option value="INR" selected>🇮🇳 INR - Indian Rupee</option>
+                            <option value="PKR">🇵🇰 PKR - Pakistani Rupee</option>
+                            <option value="BDT">🇧🇩 BDT - Bangladeshi Taka</option>
+                            <option value="NPR">🇳🇵 NPR - Nepalese Rupee</option>
+                            <option value="LKR">🇱🇰 LKR - Sri Lankan Rupee</option>
+                            <option value="PHP">🇵🇭 PHP - Philippine Peso</option>
+                            <option value="EGP">🇪🇬 EGP - Egyptian Pound</option>
+                        </select>
+                    </div>
+
+                    <div>
+                        <label class="block text-xs font-bold text-slate-600 uppercase mb-1">Live Official Interbank Rate</label>
+                        <div class="bg-emerald-950 text-white rounded-lg px-3 py-2.5 flex items-center justify-between">
+                            <span class="text-xs text-emerald-300">1 SAR =</span>
+                            <span class="font-extrabold text-base text-amber-300" id="liveInterbankDisplay">--.--</span>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Provider Comparison Matrix Cards -->
+                <div id="remitCardsGrid" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-5">
+                    <!-- Cards will be dynamically injected here via JS -->
+                </div>
+
+                <!-- Detailed Breakdown Table -->
+                <div class="mt-6 border-t pt-4">
+                    <h3 class="font-bold text-sm text-slate-800 mb-3"><i class="fa-solid fa-list-check text-slate-500 me-1"></i> Remittance Provider Fee & VAT Comparison Summary</h3>
+                    <div class="overflow-x-auto">
+                        <table class="w-full text-left text-xs border-collapse">
+                            <thead>
+                                <tr class="bg-slate-100 text-slate-600 font-bold uppercase text-[10px] border-b">
+                                    <th class="p-3">Exchange Center / App</th>
+                                    <th class="p-3">Applied Rate</th>
+                                    <th class="p-3">Fee (SAR)</th>
+                                    <th class="p-3">15% VAT</th>
+                                    <th class="p-3">Speed</th>
+                                    <th class="p-3 text-right">Net Payout Received</th>
+                                </tr>
+                            </thead>
+                            <tbody id="remitTableBody" class="divide-y divide-slate-100">
+                                <!-- Populated dynamically -->
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+
+            </div>
+
+        </section>
+
+        <!-- ========================================== -->
+        <!-- SECTION 3: DALLAH COMPUTER DRIVING EXAM SIMULATOR -->
+        <!-- ========================================== -->
+        <section id="tab-dallah" class="tab-content space-y-6">
+            
+            <div class="bg-white rounded-2xl p-5 shadow-sm border border-slate-200/80 space-y-5">
+                
+                <!-- Exam Top Info & Controls -->
+                <div class="flex flex-col lg:flex-row justify-between items-start lg:items-center gap-4 border-b pb-4">
+                    <div>
+                        <h2 class="text-xl font-bold text-slate-900 flex items-center gap-2">
+                            <i class="fa-solid fa-id-card text-emerald-600"></i> Dallah Computer Driving Exam Simulator
+                        </h2>
+                        <p class="text-xs text-slate-500 mt-1">Practice official KSA Traffic Safety & Computer Test questions in English, Hindi, Urdu, or Bengali.</p>
+                    </div>
+
+                    <div class="flex flex-wrap items-center gap-3 w-full lg:w-auto">
+                        <!-- Mode Selector -->
+                        <div class="bg-slate-100 p-1 rounded-xl flex items-center text-xs font-semibold">
+                            <button onclick="setExamMode('practice')" id="btnModePractice" class="px-3 py-1.5 rounded-lg bg-white shadow text-slate-800">Practice Mode</button>
+                            <button onclick="setExamMode('timed')" id="btnModeTimed" class="px-3 py-1.5 rounded-lg text-slate-600 hover:text-slate-900">Timed Exam (35-Q)</button>
+                        </div>
+
+                        <!-- Language Audio Reader Switcher -->
+                        <div class="flex items-center gap-1.5 bg-slate-50 border px-3 py-1.5 rounded-xl text-xs font-medium">
+                            <i class="fa-solid fa-volume-high text-emerald-600"></i>
+                            <span>Voice:</span>
+                            <select id="ttsLang" class="bg-transparent font-bold text-slate-800 focus:outline-none cursor-pointer">
+                                <option value="en">English 🇬🇧</option>
+                                <option value="hi">Hindi 🇮🇳 (हिंदी)</option>
+                                <option value="ur">Urdu 🇵🇰 (اردو)</option>
+                                <option value="bn">Bengali 🇧🇩 (বাংলা)</option>
+                            </select>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Exam Score Header & Timer Bar -->
+                <div class="grid grid-cols-2 sm:grid-cols-4 gap-3">
+                    <div class="bg-slate-50 p-3 rounded-xl border text-center">
+                        <span class="block text-[10px] font-bold text-slate-400 uppercase">Question</span>
+                        <span class="text-lg font-extrabold text-slate-800"><span id="currentQNum">1</span> / <span id="totalQNum">20</span></span>
+                    </div>
+                    <div class="bg-slate-50 p-3 rounded-xl border text-center">
+                        <span class="block text-[10px] font-bold text-slate-400 uppercase">Passing Score</span>
+                        <span class="text-lg font-extrabold text-emerald-600">22 / 35 (80%)</span>
+                    </div>
+                    <div class="bg-slate-50 p-3 rounded-xl border text-center">
+                        <span class="block text-[10px] font-bold text-slate-400 uppercase">Current Score</span>
+                        <span class="text-lg font-extrabold text-slate-800" id="scoreDisplay">0 Correct</span>
+                    </div>
+                    <div class="bg-slate-50 p-3 rounded-xl border text-center">
+                        <span class="block text-[10px] font-bold text-slate-400 uppercase">Time Remaining</span>
+                        <span class="text-lg font-extrabold text-red-600 font-mono" id="timerDisplay">30:00</span>
+                    </div>
+                </div>
+
+                <!-- Visual Question Tracker Palette -->
+                <div class="bg-slate-50 p-3 rounded-xl border">
+                    <span class="block text-[11px] font-bold text-slate-500 mb-2">Question Navigation Grid:</span>
+                    <div id="questionGridPalette" class="flex flex-wrap gap-1.5 max-h-24 overflow-y-auto">
+                        <!-- Populated dynamically -->
+                    </div>
+                </div>
+
+                <!-- Question Card -->
+                <div id="questionBox" class="bg-slate-900 text-white rounded-2xl p-6 shadow-md space-y-5">
+                    
+                    <div class="flex justify-between items-center border-b border-slate-800 pb-3">
+                        <span class="text-xs font-bold text-amber-400 uppercase tracking-wide bg-amber-400/10 px-2.5 py-1 rounded-full border border-amber-400/20" id="qCategory">
+                            Category: Mandatory Traffic Signs
+                        </span>
+                        <button onclick="speakCurrentQuestion()" class="bg-emerald-600 hover:bg-emerald-500 text-white px-3 py-1 rounded-lg text-xs font-semibold flex items-center gap-1.5 transition-all shadow">
+                            <i class="fa-solid fa-volume-high"></i> Listen Question
+                        </button>
+                    </div>
+
+                    <!-- Question Text & Sign Graphic Display -->
+                    <div class="space-y-4">
+                        <h3 class="text-lg font-bold leading-relaxed" id="qText">
+                            What does this mandatory road sign indicate on KSA highways?
+                        </h3>
+
+                        <!-- Sign Graphic Placeholder Container -->
+                        <div id="qSignGraphic" class="flex justify-center my-4">
+                            <!-- Injected SVG or Visual Graphic -->
+                        </div>
+                    </div>
+
+                    <!-- Interactive Options -->
+                    <div class="grid grid-cols-1 gap-3 pt-2" id="optionsContainer">
+                        <!-- Dynamic Option Buttons -->
+                    </div>
+
+                    <!-- Explanation Banner (Shown after choice) -->
+                    <div id="explanationBanner" class="hidden p-4 rounded-xl text-xs space-y-1 transition-all">
+                        <strong class="block font-bold text-sm" id="explanationTitle">Explanation:</strong>
+                        <p id="explanationText">According to Saudi Traffic Law, stop signs require a complete standstill before proceeding.</p>
+                    </div>
+
+                </div>
+
+                <!-- Nav Controls -->
+                <div class="flex justify-between items-center pt-2">
+                    <button onclick="prevQuestion()" id="btnPrev" class="bg-slate-200 hover:bg-slate-300 text-slate-800 px-5 py-2.5 rounded-xl font-bold text-xs transition-all flex items-center gap-2">
+                        <i class="fa-solid fa-arrow-left"></i> Previous Question
+                    </button>
+                    <button onclick="nextQuestion()" id="btnNext" class="bg-emerald-600 hover:bg-emerald-500 text-white px-6 py-2.5 rounded-xl font-bold text-xs transition-all flex items-center gap-2 shadow">
+                        Next Question <i class="fa-solid fa-arrow-right"></i>
+                    </button>
+                </div>
+
+            </div>
+
+        </section>
+
+        <!-- ========================================== -->
+        <!-- SECTION 4: EOSB & ARAMCO FUEL CALCULATOR -->
+        <!-- ========================================== -->
+        <section id="tab-calculators" class="tab-content space-y-6">
+            
+            <div class="grid grid-cols-1 lg:grid-cols-2 gap-6">
+                
+                <!-- House Driver & Expat EOSB Calculator -->
+                <div class="bg-white rounded-2xl p-5 shadow-sm border border-slate-200/80 space-y-4 flex flex-col justify-between">
+                    <div>
+                        <div class="border-b pb-3 mb-4">
+                            <h2 class="text-lg font-bold text-slate-900 flex items-center gap-2">
+                                <i class="fa-solid fa-sack-dollar text-emerald-600"></i> KSA EOSB Gratuity Calculator
+                            </h2>
+                            <p class="text-xs text-slate-500 mt-0.5">End of Service Benefits calculated per Article 22 (Domestic Labor) & Article 84 (Standard Labor Law).</p>
+                        </div>
+
+                        <div class="space-y-4 text-xs">
+                            <!-- Law Type Toggle -->
+                            <div>
+                                <label class="block font-bold text-slate-700 mb-1">Applicable Saudi Labor Law</label>
+                                <select id="eosbLawType" onchange="calculateEOSB()" class="w-full bg-slate-50 border border-slate-300 rounded-lg p-2.5 font-semibold text-slate-800 focus:ring-2 focus:ring-emerald-500 focus:outline-none">
+                                    <option value="article22" selected>Article 22: Domestic Workers / House Drivers (خاص بالعمالة المنزلية)</option>
+                                    <option value="article84">Article 84: Standard Labor Law Companies / Private Sector (نظام العمل)</option>
+                                </select>
+                            </div>
+
+                            <!-- Basic Monthly Salary -->
+                            <div>
+                                <label class="block font-bold text-slate-700 mb-1">Monthly Salary (SAR)</label>
+                                <input type="number" id="eosbSalary" value="2500" min="500" step="100" oninput="calculateEOSB()" class="w-full bg-slate-50 border border-slate-300 rounded-lg p-2.5 font-bold text-slate-800 focus:ring-2 focus:ring-emerald-500 focus:outline-none">
+                            </div>
+
+                            <!-- Years & Months of Service -->
+                            <div class="grid grid-cols-2 gap-3">
+                                <div>
+                                    <label class="block font-bold text-slate-700 mb-1">Years of Service</label>
+                                    <input type="number" id="eosbYears" value="4" min="0" max="40" oninput="calculateEOSB()" class="w-full bg-slate-50 border border-slate-300 rounded-lg p-2.5 font-bold text-slate-800 focus:ring-2 focus:ring-emerald-500 focus:outline-none">
+                                </div>
+                                <div>
+                                    <label class="block font-bold text-slate-700 mb-1">Additional Months</label>
+                                    <input type="number" id="eosbMonths" value="0" min="0" max="11" oninput="calculateEOSB()" class="w-full bg-slate-50 border border-slate-300 rounded-lg p-2.5 font-bold text-slate-800 focus:ring-2 focus:ring-emerald-500 focus:outline-none">
+                                </div>
+                            </div>
+
+                            <!-- Reason for Contract End -->
+                            <div id="eosbReasonContainer">
+                                <label class="block font-bold text-slate-700 mb-1">Termination / Departure Reason</label>
+                                <select id="eosbReason" onchange="calculateEOSB()" class="w-full bg-slate-50 border border-slate-300 rounded-lg p-2.5 font-semibold text-slate-800 focus:ring-2 focus:ring-emerald-500 focus:outline-none">
+                                    <option value="completion">End of Contract / Terminated by Sponsor (Full Pay)</option>
+                                    <option value="resignation">Resignation by Worker</option>
+                                </select>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- EOSB Result Box -->
+                    <div class="bg-gradient-to-r from-slate-900 to-emerald-950 text-white rounded-xl p-4 mt-4 space-y-2">
+                        <div class="flex justify-between items-center text-xs text-emerald-300">
+                            <span>Estimated Total EOSB Entitlement:</span>
+                            <span class="bg-emerald-800/50 px-2 py-0.5 rounded text-[10px] font-mono border border-emerald-600/40">Official KSA Formula</span>
+                        </div>
+                        <p class="text-3xl font-extrabold text-amber-400" id="eosbResultAmount">2,500 SAR</p>
+                        <p class="text-[11px] text-slate-300 border-t border-slate-800 pt-2" id="eosbNote">
+                            Article 22 Rules: Domestic workers are entitled to 1 month's salary after completing 4 consecutive years of service.
+                        </p>
+                    </div>
+                </div>
+
+                <!-- Aramco Fuel Cost Estimator -->
+                <div class="bg-white rounded-2xl p-5 shadow-sm border border-slate-200/80 space-y-4 flex flex-col justify-between">
+                    <div>
+                        <div class="border-b pb-3 mb-4 flex justify-between items-center">
+                            <div>
+                                <h2 class="text-lg font-bold text-slate-900 flex items-center gap-2">
+                                    <i class="fa-solid fa-gas-pump text-amber-500"></i> Aramco Fuel Cost Estimator
+                                </h2>
+                                <p class="text-xs text-slate-500 mt-0.5">Calculates fuel expense based on official Saudi Aramco pump rates.</p>
+                            </div>
+                            <span class="text-[10px] bg-amber-100 text-amber-800 font-bold px-2 py-1 rounded">2026 Price Lock</span>
+                        </div>
+
+                        <!-- Pump Rates Banner -->
+                        <div class="grid grid-cols-3 gap-2 text-center text-xs mb-4">
+                            <div class="bg-emerald-50 border border-emerald-200 p-2 rounded-lg">
+                                <span class="block text-[10px] font-bold text-emerald-800">Gasoline 91</span>
+                                <span class="font-extrabold text-slate-900">2.18 SAR/L</span>
+                            </div>
+                            <div class="bg-red-50 border border-red-200 p-2 rounded-lg">
+                                <span class="block text-[10px] font-bold text-red-800">Gasoline 95</span>
+                                <span class="font-extrabold text-slate-900">2.33 SAR/L</span>
+                            </div>
+                            <div class="bg-slate-100 border border-slate-300 p-2 rounded-lg">
+                                <span class="block text-[10px] font-bold text-slate-700">Diesel</span>
+                                <span class="font-extrabold text-slate-900">1.79 SAR/L</span>
+                            </div>
+                        </div>
+
+                        <div class="space-y-4 text-xs">
+                            <!-- Fuel Type Selection -->
+                            <div>
+                                <label class="block font-bold text-slate-700 mb-1">Select Fuel Type</label>
+                                <select id="fuelType" onchange="calculateFuel()" class="w-full bg-slate-50 border border-slate-300 rounded-lg p-2.5 font-bold text-slate-800 focus:ring-2 focus:ring-amber-500 focus:outline-none">
+                                    <option value="2.18">Gasoline 91 (91 بنزين) - 2.18 SAR</option>
+                                    <option value="2.33">Gasoline 95 (95 بنزين) - 2.33 SAR</option>
+                                    <option value="1.79">Diesel (ديزل) - 1.79 SAR</option>
+                                </select>
+                            </div>
+
+                            <!-- Vehicle Efficiency Preset -->
+                            <div>
+                                <label class="block font-bold text-slate-700 mb-1">Vehicle Mileage / Efficiency (km per Liter)</label>
+                                <select id="fuelEfficiency" onchange="calculateFuel()" class="w-full bg-slate-50 border border-slate-300 rounded-lg p-2.5 font-semibold text-slate-800 focus:ring-2 focus:ring-amber-500 focus:outline-none">
+                                    <option value="14">Sedan / Small Car (14 km / L)</option>
+                                    <option value="10" selected>SUV / Midsize Car (10 km / L)</option>
+                                    <option value="8">GMC Yukon / Large Van / Truck (8 km / L)</option>
+                                </select>
+                            </div>
+
+                            <!-- Distance Slider -->
+                            <div>
+                                <div class="flex justify-between items-center mb-1">
+                                    <label class="font-bold text-slate-700">Trip / Daily Distance: <span id="distanceValue" class="text-emerald-700 font-extrabold">300 km</span></label>
+                                </div>
+                                <input type="range" id="fuelDistance" min="10" max="2000" step="10" value="300" oninput="calculateFuel()" class="w-full accent-emerald-600 cursor-pointer">
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Fuel Result Box -->
+                    <div class="bg-slate-900 text-white rounded-xl p-4 mt-4 space-y-2">
+                        <div class="grid grid-cols-2 gap-2 text-xs border-b border-slate-800 pb-2">
+                            <div>
+                                <span class="text-slate-400 block text-[10px]">Estimated Liters Needed:</span>
+                                <span class="text-lg font-bold text-emerald-400" id="fuelLiters">30.0 L</span>
+                            </div>
+                            <div>
+                                <span class="text-slate-400 block text-[10px]">Single Trip Cost:</span>
+                                <span class="text-lg font-bold text-amber-400" id="fuelTripCost">65.40 SAR</span>
+                            </div>
+                        </div>
+                        <div class="flex justify-between items-center text-xs pt-1">
+                            <span class="text-slate-300">Estimated Monthly Fuel Budget (30 days):</span>
+                            <span class="font-extrabold text-amber-300 text-sm" id="fuelMonthlyCost">1,962.00 SAR</span>
+                        </div>
+                    </div>
+                </div>
+
+            </div>
+
+        </section>
+
+        <!-- ========================================== -->
+        <!-- SECTION 5: SURVIVAL ARABIC AUDIO SOUNDBOARD -->
+        <!-- ========================================== -->
+        <section id="tab-arabic" class="tab-content space-y-6">
+            
+            <div class="bg-white rounded-2xl p-5 shadow-sm border border-slate-200/80 space-y-5">
+                <div class="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-2 border-b pb-4">
+                    <div>
+                        <h2 class="text-xl font-bold text-slate-900 flex items-center gap-2">
+                            <i class="fa-solid fa-comments text-emerald-600"></i> Drivers' Survival Arabic Audio Phrasebook
+                        </h2>
+                        <p class="text-xs text-slate-500 mt-1">Tap any phrase for instant native Arabic speech playback (`ar-SA`).</p>
+                    </div>
+                    <span class="text-xs bg-emerald-50 text-emerald-700 font-semibold px-3 py-1 rounded-full border border-emerald-200">
+                        <i class="fa-solid fa-volume-high me-1"></i> Web Speech Audio Ready
+                    </span>
+                </div>
+
+                <!-- Phrase Cards Grid -->
+                <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4" id="arabicPhraseGrid">
+                    <!-- Cards will be populated dynamically -->
+                </div>
+            </div>
+
+        </section>
+
+        <!-- ========================================== -->
+        <!-- SECTION 6: KSA DIRECTORY -->
+        <!-- ========================================== -->
+        <section id="tab-directory" class="tab-content space-y-6">
+            
+            <div class="bg-white rounded-2xl p-5 shadow-sm border border-slate-200/80 space-y-5">
+                <div class="border-b pb-3">
+                    <h2 class="text-xl font-bold text-slate-900 flex items-center gap-2">
+                        <i class="fa-solid fa-building-columns text-emerald-600"></i> Official Saudi Government & Emergency Portals
+                    </h2>
+                    <p class="text-xs text-slate-500 mt-1">Direct official access portals for residency, labor contracts, traffic accidents, and health status.</p>
+                </div>
+
+                <!-- Emergency Contact Quick Dials -->
+                <div class="bg-red-50 border border-red-200 rounded-xl p-4 space-y-3">
+                    <h3 class="text-xs font-extrabold text-red-800 uppercase tracking-wide flex items-center gap-2">
+                        <i class="fa-solid fa-phone-volume text-red-600"></i> Saudi Emergency Hotlines (Direct Dial)
+                    </h3>
+                    <div class="grid grid-cols-2 sm:grid-cols-4 gap-3 text-xs">
+                        <a href="tel:911" class="bg-white p-2.5 rounded-lg border border-red-200 font-bold text-red-900 hover:bg-red-600 hover:text-white transition-all text-center flex items-center justify-center gap-2 shadow-sm">
+                            <i class="fa-solid fa-shield-halved"></i> 911 Emergency
+                        </a>
+                        <a href="tel:993" class="bg-white p-2.5 rounded-lg border border-red-200 font-bold text-red-900 hover:bg-red-600 hover:text-white transition-all text-center flex items-center justify-center gap-2 shadow-sm">
+                            <i class="fa-solid fa-car-burst"></i> 993 Traffic Police
+                        </a>
+                        <a href="tel:997" class="bg-white p-2.5 rounded-lg border border-red-200 font-bold text-red-900 hover:bg-red-600 hover:text-white transition-all text-center flex items-center justify-center gap-2 shadow-sm">
+                            <i class="fa-solid fa-truck-medical"></i> 997 Red Crescent
+                        </a>
+                        <a href="tel:998" class="bg-white p-2.5 rounded-lg border border-red-200 font-bold text-red-900 hover:bg-red-600 hover:text-white transition-all text-center flex items-center justify-center gap-2 shadow-sm">
+                            <i class="fa-solid fa-fire-extinguisher"></i> 998 Fire Dept
+                        </a>
+                    </div>
+                </div>
+
+                <!-- Official Portal Cards -->
+                <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-5">
+                    
+                    <!-- Absher Card -->
+                    <div class="bg-white border border-slate-200 rounded-2xl p-5 hover:border-emerald-500 hover:shadow-md transition-all flex flex-col justify-between space-y-4">
+                        <div class="space-y-2">
+                            <div class="w-10 h-10 rounded-xl bg-emerald-100 text-emerald-800 flex items-center justify-center font-bold text-lg">
+                                🟢
+                            </div>
+                            <h3 class="font-bold text-base text-slate-900">Absher Portal (أبشر)</h3>
+                            <p class="text-xs text-slate-500">Iqama validity, traffic violations check, driver's license renewal, exit re-entry visa status.</p>
+                        </div>
+                        <a href="https://www.absher.sa" target="_blank" class="w-full bg-emerald-700 hover:bg-emerald-800 text-white py-2 rounded-xl text-xs font-semibold transition-all text-center block">
+                            Launch Absher <i class="fa-solid fa-arrow-up-right-from-square text-[10px] ms-1"></i>
+                        </a>
+                    </div>
+
+                    <!-- Qiwa Portal -->
+                    <div class="bg-white border border-slate-200 rounded-2xl p-5 hover:border-emerald-500 hover:shadow-md transition-all flex flex-col justify-between space-y-4">
+                        <div class="space-y-2">
+                            <div class="w-10 h-10 rounded-xl bg-blue-100 text-blue-800 flex items-center justify-center font-bold text-lg">
+                                📜
+                            </div>
+                            <h3 class="font-bold text-base text-slate-900">Qiwa Platform (قوى)</h3>
+                            <p class="text-xs text-slate-500">Labor contract verification, job transfer status, company Nitaqat rating, and ministry legal services.</p>
+                        </div>
+                        <a href="https://qiwa.sa" target="_blank" class="w-full bg-slate-900 hover:bg-emerald-700 text-white py-2 rounded-xl text-xs font-semibold transition-all text-center block">
+                            Launch Qiwa Portal <i class="fa-solid fa-arrow-up-right-from-square text-[10px] ms-1"></i>
+                        </a>
+                    </div>
+
+                    <!-- Muqeem Portal -->
+                    <div class="bg-white border border-slate-200 rounded-2xl p-5 hover:border-emerald-500 hover:shadow-md transition-all flex flex-col justify-between space-y-4">
+                        <div class="space-y-2">
+                            <div class="w-10 h-10 rounded-xl bg-amber-100 text-amber-800 flex items-center justify-center font-bold text-lg">
+                                🆔
+                            </div>
+                            <h3 class="font-bold text-base text-slate-900">Muqeem Portal (مقيم)</h3>
+                            <p class="text-xs text-slate-500">Resident verification, exit-re-entry visa printout, sponsor transfer tracking for expats.</p>
+                        </div>
+                        <a href="https://muqeem.sa" target="_blank" class="w-full bg-slate-900 hover:bg-emerald-700 text-white py-2 rounded-xl text-xs font-semibold transition-all text-center block">
+                            Launch Muqeem <i class="fa-solid fa-arrow-up-right-from-square text-[10px] ms-1"></i>
+                        </a>
+                    </div>
+
+                    <!-- Najm App -->
+                    <div class="bg-white border border-slate-200 rounded-2xl p-5 hover:border-emerald-500 hover:shadow-md transition-all flex flex-col justify-between space-y-4">
+                        <div class="space-y-2">
+                            <div class="w-10 h-10 rounded-xl bg-red-100 text-red-800 flex items-center justify-center font-bold text-lg">
+                                🚗
+                            </div>
+                            <h3 class="font-bold text-base text-slate-900">Najm Accidents (نجم)</h3>
+                            <p class="text-xs text-slate-500">Report traffic accidents on road, vehicle insurance claim status, and accident surveyor dispatch.</p>
+                        </div>
+                        <a href="https://www.najm.sa" target="_blank" class="w-full bg-slate-900 hover:bg-emerald-700 text-white py-2 rounded-xl text-xs font-semibold transition-all text-center block">
+                            Launch Najm <i class="fa-solid fa-arrow-up-right-from-square text-[10px] ms-1"></i>
+                        </a>
+                    </div>
+
+                    <!-- Efada Medical -->
+                    <div class="bg-white border border-slate-200 rounded-2xl p-5 hover:border-emerald-500 hover:shadow-md transition-all flex flex-col justify-between space-y-4">
+                        <div class="space-y-2">
+                            <div class="w-10 h-10 rounded-xl bg-teal-100 text-teal-800 flex items-center justify-center font-bold text-lg">
+                                🏥
+                            </div>
+                            <h3 class="font-bold text-base text-slate-900">Efada Medical Check (إفادة)</h3>
+                            <p class="text-xs text-slate-500">Driving license medical report verification status directly synced to Absher.</p>
+                        </div>
+                        <a href="https://efada.com.sa" target="_blank" class="w-full bg-slate-900 hover:bg-emerald-700 text-white py-2 rounded-xl text-xs font-semibold transition-all text-center block">
+                            Verify Efada Report <i class="fa-solid fa-arrow-up-right-from-square text-[10px] ms-1"></i>
+                        </a>
+                    </div>
+
+                    <!-- Dallah Portal -->
+                    <div class="bg-white border border-slate-200 rounded-2xl p-5 hover:border-emerald-500 hover:shadow-md transition-all flex flex-col justify-between space-y-4">
+                        <div class="space-y-2">
+                            <div class="w-10 h-10 rounded-xl bg-purple-100 text-purple-800 flex items-center justify-center font-bold text-lg">
+                                🚦
+                            </div>
+                            <h3 class="font-bold text-base text-slate-900">Dallah Driving School</h3>
+                            <p class="text-xs text-slate-500">Book driving test appointments, school training schedules across Riyadh, Jeddah & Eastern Province.</p>
+                        </div>
+                        <a href="https://dallahdrivingschool.sa" target="_blank" class="w-full bg-slate-900 hover:bg-emerald-700 text-white py-2 rounded-xl text-xs font-semibold transition-all text-center block">
+                            Book Dallah Test <i class="fa-solid fa-arrow-up-right-from-square text-[10px] ms-1"></i>
+                        </a>
+                    </div>
+
+                </div>
+            </div>
+
+        </section>
+
+    </main>
+
+    <!-- Leaflet Full-Screen Modal Viewer -->
+    <div id="leafletModal" class="fixed inset-0 bg-slate-900/80 backdrop-blur-sm z-50 hidden flex items-center justify-center p-4">
+        <div class="bg-white rounded-2xl max-w-2xl w-full overflow-hidden shadow-2xl flex flex-col max-h-[90vh]">
+            <div class="bg-slate-900 text-white p-4 flex justify-between items-center">
+                <div>
+                    <h3 class="font-bold text-base" id="modalFlyerTitle">Panda Weekly Mega Deals</h3>
+                    <p class="text-xs text-slate-400">Page <span id="currentPageNum">1</span> of <span id="totalPageNum">4</span></p>
+                </div>
+                <button onclick="closeLeafletModal()" class="text-slate-400 hover:text-white text-xl font-bold p-1">
+                    <i class="fa-solid fa-xmark"></i>
+                </button>
+            </div>
+            <div class="p-6 overflow-y-auto flex-1 bg-slate-100 flex flex-col items-center justify-center">
+                <div id="modalLeafletViewer" class="bg-white border rounded-xl p-6 shadow w-full text-center space-y-4">
+                    <!-- Page content rendered here -->
+                </div>
+            </div>
+            <div class="bg-white border-t p-4 flex justify-between items-center">
+                <button onclick="changeLeafletPage(-1)" id="btnPrevPage" class="bg-slate-200 hover:bg-slate-300 text-slate-800 px-4 py-2 rounded-lg text-xs font-bold">
+                    <i class="fa-solid fa-chevron-left me-1"></i> Previous Page
+                </button>
+                <span class="text-xs font-bold text-slate-600" id="modalPageIndicator">Page 1 / 4</span>
+                <button onclick="changeLeafletPage(1)" id="btnNextPage" class="bg-emerald-600 hover:bg-emerald-500 text-white px-4 py-2 rounded-lg text-xs font-bold">
+                    Next Page <i class="fa-solid fa-chevron-right ms-1"></i>
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Floating Mobile Bottom Sticky Navigation Bar -->
+    <div class="md:hidden fixed bottom-0 left-0 right-0 bg-slate-900 border-t border-slate-800 text-slate-400 flex justify-around py-2 z-40 text-[10px]">
+        <button onclick="switchTab('deals')" class="flex flex-col items-center gap-1 hover:text-emerald-400">
+            <i class="fa-solid fa-store text-base"></i> Deals
+        </button>
+        <button onclick="switchTab('remittance')" class="flex flex-col items-center gap-1 hover:text-emerald-400">
+            <i class="fa-solid fa-money-bill-transfer text-base"></i> Rates
+        </button>
+        <button onclick="switchTab('dallah')" class="flex flex-col items-center gap-1 hover:text-emerald-400">
+            <i class="fa-solid fa-id-card text-base"></i> Exam
+        </button>
+        <button onclick="switchTab('calculators')" class="flex flex-col items-center gap-1 hover:text-emerald-400">
+            <i class="fa-solid fa-calculator text-base"></i> EOSB
+        </button>
+        <button onclick="switchTab('arabic')" class="flex flex-col items-center gap-1 hover:text-emerald-400">
+            <i class="fa-solid fa-comments text-base"></i> Arabic
+        </button>
+    </div>
+
+    <!-- Javascript Logic Core -->
+    <script>
+        
+        // -------------------------------------------------------------
+        // Global Application State & Datasets
+        // -------------------------------------------------------------
+        
+        let currentTab = 'deals';
+        let liveRatesData = {
+            INR: 23.92,
+            PKR: 74.30,
+            BDT: 31.85,
+            NPR: 38.20,
+            LKR: 81.50,
+            PHP: 15.10,
+            EGP: 12.85
+        };
+
+        // Provider configs & base spreads
+        const providersList = [
+            { id: 'stc', name: 'STC Pay', logo: '📱', baseFee: 15.0, vatPercent: 15, speed: 'Instant Transfer', spreadMargin: 0.005, rating: '4.8 ⭐' },
+            { id: 'urpay', name: 'Urpay', logo: '💳', baseFee: 10.0, vatPercent: 15, speed: 'Instant Transfer', spreadMargin: 0.004, rating: '4.7 ⭐' },
+            { id: 'mobily', name: 'Mobily Pay', logo: '📶', baseFee: 12.0, vatPercent: 15, speed: 'Instant Transfer', spreadMargin: 0.006, rating: '4.6 ⭐' },
+            { id: 'tahweel', name: 'Tahweel Al Rajhi', logo: '🏦', baseFee: 16.0, vatPercent: 15, speed: 'Same Day Bank', spreadMargin: 0.003, rating: '4.9 ⭐' },
+            { id: 'wu', name: 'Western Union', logo: '🌐', baseFee: 20.0, vatPercent: 15, speed: 'Cash Pickup / Instant', spreadMargin: 0.012, rating: '4.5 ⭐' }
+        ];
+
+        // Dallah Exam Dataset (20 high-yield KSA computer questions)
+        const dallahQuestions = [
+            {
+                category: "Mandatory Traffic Signs",
+                text: "What does an octagonal red sign with 'STOP' (قف) mean at a Saudi intersection?",
+                options: [
+                    "Slow down and proceed if clear",
+                    "Stop completely, yield to all traffic, then proceed when safe",
+                    "Stop only if traffic lights are flashing red",
+                    "Speed up to clear the intersection quickly"
+                ],
+                correct: 1,
+                explanation: "Under Saudi Traffic Law, a red octagonal STOP sign mandates a 100% full vehicle standstill at the line."
+            },
+            {
+                category: "Speed Limits & Radar",
+                text: "What is the official maximum speed limit for private passenger sedans on major KSA interstate highways (e.g. Riyadh-Jeddah)?",
+                options: ["100 km/h", "120 km/h", "140 km/h", "160 km/h"],
+                correct: 2,
+                explanation: "Major Saudi highways permit up to 140 km/h for passenger cars unless SAHER signs indicate lower limits."
+            },
+            {
+                category: "Safety & Seatbelts",
+                text: "Who in the motor vehicle is legally required to wear a seatbelt under KSA traffic laws?",
+                options: [
+                    "Only the driver",
+                    "Driver and front seat passenger only",
+                    "All passengers in front and rear seats",
+                    "Only passengers under 18 years old"
+                ],
+                correct: 2,
+                explanation: "Saudi traffic enforcement requires every single occupant in front and back seats to buckle up."
+            },
+            {
+                category: "Road Markings",
+                text: "What does a solid double yellow line down the middle of the road signify?",
+                options: [
+                    "Overtaking permitted during daytime",
+                    "Strictly NO overtaking or crossing from either direction",
+                    "Reserved lane for public buses",
+                    "Parking permitted on weekends"
+                ],
+                correct: 1,
+                explanation: "Solid double lines prohibit any lane crossing or overtaking maneuver from both directions."
+            },
+            {
+                category: "Roundabout Rules",
+                text: "When entering a roundabout in Saudi Arabia, who has the absolute right of way?",
+                options: [
+                    "Vehicles entering the roundabout",
+                    "Vehicles already inside the roundabout on your left",
+                    "The largest vehicle or truck",
+                    "Whichever driver honks first"
+                ],
+                correct: 1,
+                explanation: "Priority always belongs to vehicles already circulating inside the roundabout coming from your left."
+            },
+            {
+                category: "Emergency Vehicles",
+                text: "What must you immediately do when an ambulance or Najm patrol approaches with flashing emergency lights and siren?",
+                options: [
+                    "Maintain speed and stay in lane",
+                    "Safely yield the lane and pull over to the far right",
+                    "Follow closely behind the ambulance to clear traffic",
+                    "Stop immediately in the middle of the road"
+                ],
+                correct: 1,
+                explanation: "Drivers must safely clear the lane and pull to the right to allow emergency services immediate pass."
+            },
+            {
+                category: "Mobile Phone Use",
+                text: "Is holding a handheld mobile phone while driving allowed in KSA?",
+                options: [
+                    "Allowed while stopped at red lights",
+                    "Allowed only with hand-held speakerphone",
+                    "Strictly prohibited and penalized by SAHER cameras",
+                    "Allowed during highway driving"
+                ],
+                correct: 2,
+                explanation: "Handheld mobile phone usage while driving carries automated SAHER fines ranging from 500 to 900 SAR."
+            },
+            {
+                category: "Parking Violations",
+                text: "Parking in spaces designated for people with disabilities without a valid permit results in:",
+                options: [
+                    "A verbal warning",
+                    "A heavy traffic fine and potential towing",
+                    "No penalty if under 15 minutes",
+                    "Discounted parking fee"
+                ],
+                correct: 1,
+                explanation: "Saudi traffic law heavily penalizes unauthorized parking in handicapped stalls."
+            }
+        ];
+
+        // Survival Arabic Audio Phrases Dataset
+        const arabicPhrases = [
+            { title: "Fill Full Tank (Gas Station)", ar: "عبّي فل لو سمحت", trans: "Abbi Full Law Samaht", meaning: "Fill it full, please", cat: "gas" },
+            { title: "Gasoline 91 Please", ar: "بنزين واحد وتسعين", trans: "Benzine Wahid Wa Tis'een", meaning: "91 Gasoline", cat: "gas" },
+            { title: "Here is my Iqama & License", ar: "تفضل هذا إقامتي ورخصتي", trans: "Tafaddal Hadha Iqamati Wa RukhSati", meaning: "Here is my ID and License", cat: "police" },
+            { title: "Is there a traffic breakdown?", ar: "هل فيه زحمة طريق؟", trans: "Hal Fee Zahma Tareeq?", meaning: "Is there heavy traffic ahead?", cat: "traffic" },
+            { title: "How much is the fare/cost?", ar: "كم الحساب؟", trans: "Kam Al Hisab?", meaning: "How much is the total?", cat: "general" },
+            { title: "Change the engine oil", ar: "غير زيت الماكينة", trans: "Ghayyir Zayt Al Makeena", meaning: "Change engine oil", cat: "repair" },
+            { title: "Check tire air pressure", ar: "عبي هواء كفرات", trans: "Abbi Hawa Kafarat", meaning: "Check/fill tire pressure", cat: "repair" },
+            { title: "Call Najm Accident Support", ar: "اتصل على نجم للحوادث", trans: "Ittasil Ala Najm", meaning: "Call Najm accident patrol", cat: "emergency" },
+            { title: "Thank you brother!", ar: "شكراً يا أخوي", trans: "Shukran Ya Akhuy", meaning: "Thank you my brother", cat: "general" },
+            { title: "I don't speak Arabic well", ar: "أنا ما أتكلم عربي كويس", trans: "Ana Ma Atkallam Arabi Kwayyis", meaning: "I don't speak good Arabic", cat: "general" },
+            { title: "Where is the highway entrance?", ar: "وين مدخل الخط السريع؟", trans: "Wayn Makhal Al Khatt Al Saree?", meaning: "Where is highway entry?", cat: "traffic" },
+            { title: "Turn on the AC please", ar: "شغّل المكيف لو سمحت", trans: "Shaggil Al Mukayyif Law Samaht", meaning: "Turn on AC please", cat: "general" }
+        ];
+
+        // Current Exam Engine State
+        let examState = {
+            mode: 'practice',
+            currentIdx: 0,
+            userAnswers: {},
+            score: 0,
+            timerInterval: null,
+            secondsLeft: 1800
+        };
+
+        // Modal Leaflet State
+        let leafletModalState = {
+            title: '',
+            totalPages: 4,
+            currentPage: 1,
+            storeName: ''
+        };
+
+        // -------------------------------------------------------------
+        // Application Initialization Lifecycle
+        // -------------------------------------------------------------
+        window.onload = function() {
+            startClock();
+            fetchLiveRemittanceRates();
+            renderArabicPhrases();
+            initDallahExam();
+            calculateEOSB();
+            calculateFuel();
+        };
+
+        // Live Clock Counter
+        function startClock() {
+            setInterval(() => {
+                const now = new Date();
+                const clockEl = document.getElementById('liveClock');
+                if (clockEl) {
+                    clockEl.innerText = now.toLocaleTimeString('en-US', { timeZone: 'Asia/Riyadh' }) + ' KSA';
+                }
+            }, 1000);
+        }
+
+        // -------------------------------------------------------------
+        // Section Tab Switcher System
+        // -------------------------------------------------------------
+        function switchTab(tabId) {
+            currentTab = tabId;
+
+            // Hide all tab content containers
+            document.querySelectorAll('.tab-content').forEach(el => el.classList.remove('active'));
+
+            // Deactivate all desktop nav tab highlights
+            document.querySelectorAll('.nav-tab').forEach(btn => {
+                btn.classList.remove('border-emerald-500', 'text-emerald-400');
+                btn.classList.add('border-transparent', 'text-slate-400');
+            });
+
+            // Show target container
+            const targetContent = document.getElementById('tab-' + tabId);
+            if (targetContent) {
+                targetContent.classList.add('active');
+            }
+
+            // Highlight target tab button
+            const targetNav = document.getElementById('nav-' + tabId);
+            if (targetNav) {
+                targetNav.classList.remove('border-transparent', 'text-slate-400');
+                targetNav.classList.add('border-emerald-500', 'text-emerald-400');
+            }
+
+            window.scrollTo({ top: 0, behavior: 'smooth' });
+        }
+
+        // Share functionality
+        function shareAppOnWhatsApp() {
+            const text = encodeURIComponent("Check out Saudi Arabia Expat & Driver Utility Hub! Live Remittance rates, ClickFlyer deals, Dallah Driving Exam & EOSB Calculator: ");
+            const url = encodeURIComponent(window.location.href);
+            window.open(`https://api.whatsapp.com/send?text=${text}${url}`, '_blank');
+        }
+
+        // -------------------------------------------------------------
+        // SECTION 1: ClickFlyer Deals & Leaflet Viewer Logic
+        // -------------------------------------------------------------
+        function filterFlyers() {
+            const city = document.getElementById('cityFilter').value;
+            const category = document.getElementById('categoryFilter').value;
+            const cards = document.querySelectorAll('.flyer-card');
+
+            cards.forEach(card => {
+                const cardCat = card.getAttribute('data-category');
+                const cardCities = card.getAttribute('data-cities').split(',');
+
+                const catMatch = (category === 'all' || cardCat === category);
+                const cityMatch = (city === 'all' || cardCities.includes(city));
+
+                if (catMatch && cityMatch) {
+                    card.style.display = 'flex';
+                } else {
+                    card.style.display = 'none';
+                }
+            });
+        }
+
+        function openLeafletModal(title, pages, storeName) {
+            leafletModalState.title = title;
+            leafletModalState.totalPages = pages;
+            leafletModalState.currentPage = 1;
+            leafletModalState.storeName = storeName;
+
+            document.getElementById('modalFlyerTitle').innerText = title;
+            document.getElementById('totalPageNum').innerText = pages;
+            
+            renderLeafletPage();
+            document.getElementById('leafletModal').classList.remove('hidden');
+        }
+
+        function closeLeafletModal() {
+            document.getElementById('leafletModal').classList.add('hidden');
+        }
+
+        function changeLeafletPage(delta) {
+            const newPage = leafletModalState.currentPage + delta;
+            if (newPage >= 1 && newPage <= leafletModalState.totalPages) {
+                leafletModalState.currentPage = newPage;
+                renderLeafletPage();
+            }
+        }
+
+        function renderLeafletPage() {
+            const page = leafletModalState.currentPage;
+            const total = leafletModalState.totalPages;
+            const store = leafletModalState.storeName;
+
+            document.getElementById('currentPageNum').innerText = page;
+            document.getElementById('modalPageIndicator').innerText = `Page ${page} / ${total}`;
+
+            const viewer = document.getElementById('modalLeafletViewer');
+            viewer.innerHTML = `
+                <div class="border-2 border-dashed border-emerald-500/40 rounded-xl p-8 bg-emerald-50/50 space-y-3">
+                    <div class="text-4xl">🛍️ Page ${page} Preview</div>
+                    <h4 class="font-bold text-slate-800 text-lg">${store} Weekly Feature Leaflet - Section ${page}</h4>
+                    <p class="text-xs text-slate-500">Displaying weekly discounts for Basmati Rice, Cooking Oil, Fresh Poultry & Household Electronics.</p>
+                    <div class="inline-block bg-emerald-600 text-white text-xs px-3 py-1 rounded-full font-bold">
+                        Special Discount Valid Across KSA Branches
+                    </div>
+                </div>
+            `;
+
+            document.getElementById('btnPrevPage').disabled = (page === 1);
+            document.getElementById('btnNextPage').disabled = (page === total);
+        }
+
+        // -------------------------------------------------------------
+        // SECTION 2: Live Remittance Rate Engine
+        // -------------------------------------------------------------
+        async function fetchLiveRemittanceRates() {
+            try {
+                const response = await fetch('https://open.er-api.com/v6/latest/SAR');
+                if (response.ok) {
+                    const data = await response.json();
+                    if (data && data.rates) {
+                        liveRatesData.INR = data.rates.INR || liveRatesData.INR;
+                        liveRatesData.PKR = data.rates.PKR || liveRatesData.PKR;
+                        liveRatesData.BDT = data.rates.BDT || liveRatesData.BDT;
+                        liveRatesData.NPR = data.rates.NPR || liveRatesData.NPR;
+                        liveRatesData.LKR = data.rates.LKR || liveRatesData.LKR;
+                        liveRatesData.PHP = data.rates.PHP || liveRatesData.PHP;
+                        liveRatesData.EGP = data.rates.EGP || liveRatesData.EGP;
+                    }
+                }
+            } catch (err) {
+                console.log("Using cached fallback rate data.");
+            }
+            calculateRemittance();
+        }
+
+        function calculateRemittance() {
+            const amount = parseFloat(document.getElementById('remitAmount').value) || 1000;
+            const targetCurr = document.getElementById('targetCurrency').value;
+            const baseRate = liveRatesData[targetCurr] || 20.0;
+
+            document.getElementById('liveInterbankDisplay').innerText = `${baseRate.toFixed(2)} ${targetCurr}`;
+
+            const grid = document.getElementById('remitCardsGrid');
+            const tableBody = document.getElementById('remitTableBody');
+
+            grid.innerHTML = '';
+            tableBody.innerHTML = '';
+
+            let topPayout = 0;
+            let bestProviderId = '';
+
+            // Calculate payouts for all providers
+            const results = providersList.map(prov => {
+                const feeSAR = prov.baseFee;
+                const vatSAR = feeSAR * (prov.vatPercent / 100);
+                const effectiveSARToTransfer = Math.max(0, amount - feeSAR - vatSAR);
+                
+                // Exchange rate margin spread applied
+                const effectiveRate = baseRate * (1 - prov.spreadMargin);
+                const netPayoutHome = effectiveSARToTransfer * effectiveRate;
+
+                if (netPayoutHome > topPayout) {
+                    topPayout = netPayoutHome;
+                    bestProviderId = prov.id;
+                }
+
+                return {
+                    ...prov,
+                    feeSAR,
+                    vatSAR,
+                    effectiveRate,
+                    netPayoutHome
+                };
+            });
+
+            // Render Dynamic Cards
+            results.forEach(res => {
+                const isBest = (res.id === bestProviderId);
+                
+                // Render Card
+                const cardHtml = `
+                    <div class="bg-white rounded-2xl p-4 border ${isBest ? 'border-2 border-emerald-500 shadow-md ring-2 ring-emerald-500/20' : 'border-slate-200'} space-y-3 flex flex-col justify-between relative">
+                        ${isBest ? `<span class="absolute -top-3 left-4 bg-emerald-600 text-white text-[9px] font-extrabold uppercase px-2.5 py-0.5 rounded-full shadow">Highest Payout</span>` : ''}
+                        <div>
+                            <div class="flex justify-between items-center mb-2">
+                                <div class="flex items-center gap-2">
+                                    <span class="text-xl">${res.logo}</span>
+                                    <h4 class="font-bold text-slate-800 text-sm">${res.name}</h4>
+                                </div>
+                                <span class="text-xs text-slate-500 font-semibold">${res.rating}</span>
+                            </div>
+
+                            <div class="bg-slate-50 p-2.5 rounded-xl border space-y-1 text-xs">
+                                <div class="flex justify-between text-slate-600">
+                                    <span>Applied Rate:</span>
+                                    <strong class="text-slate-800">1 SAR = ${res.effectiveRate.toFixed(2)} ${targetCurr}</strong>
+                                </div>
+                                <div class="flex justify-between text-slate-600">
+                                    <span>Transfer Fee:</span>
+                                    <span>${res.feeSAR.toFixed(2)} SAR</span>
+                                </div>
+                                <div class="flex justify-between text-slate-600">
+                                    <span>15% KSA VAT:</span>
+                                    <span>${res.vatSAR.toFixed(2)} SAR</span>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="border-t pt-2 flex justify-between items-end">
+                            <div>
+                                <span class="text-[10px] text-slate-400 block uppercase font-bold">Net Home Payout</span>
+                                <span class="text-lg font-extrabold text-emerald-700">${res.netPayoutHome.toLocaleString(undefined, {maximumFractionDigits:2})} ${targetCurr}</span>
+                            </div>
+                            <span class="text-[10px] bg-slate-100 text-slate-600 px-2 py-1 rounded font-semibold">${res.speed}</span>
+                        </div>
+                    </div>
+                `;
+                grid.innerHTML += cardHtml;
+
+                // Render Table Row
+                const rowHtml = `
+                    <tr class="${isBest ? 'bg-emerald-50/60 font-semibold' : ''}">
+                        <td class="p-3 font-bold text-slate-900 flex items-center gap-2">
+                            <span>${res.logo}</span> ${res.name}
+                        </td>
+                        <td class="p-3">1 SAR = ${res.effectiveRate.toFixed(2)}</td>
+                        <td class="p-3">${res.feeSAR.toFixed(2)} SAR</td>
+                        <td class="p-3">${res.vatSAR.toFixed(2)} SAR</td>
+                        <td class="p-3 text-slate-500">${res.speed}</td>
+                        <td class="p-3 text-right font-extrabold ${isBest ? 'text-emerald-700' : 'text-slate-800'}">
+                            ${res.netPayoutHome.toLocaleString(undefined, {maximumFractionDigits:2})} ${targetCurr}
+                        </td>
+                    </tr>
+                `;
+                tableBody.innerHTML += rowHtml;
+            });
+        }
+
+        // -------------------------------------------------------------
+        // SECTION 3: Dallah Driving Exam Simulator Logic
+        // -------------------------------------------------------------
+        function initDallahExam() {
+            examState.currentIdx = 0;
+            examState.userAnswers = {};
+            examState.score = 0;
+            renderQuestionGridPalette();
+            renderCurrentQuestion();
+        }
+
+        function setExamMode(mode) {
+            examState.mode = mode;
+            const btnP = document.getElementById('btnModePractice');
+            const btnT = document.getElementById('btnModeTimed');
+
+            if (mode === 'practice') {
+                btnP.className = "px-3 py-1.5 rounded-lg bg-white shadow text-slate-800 font-bold";
+                btnT.className = "px-3 py-1.5 rounded-lg text-slate-600 hover:text-slate-900";
+                clearInterval(examState.timerInterval);
+                document.getElementById('timerDisplay').innerText = "Unlimited";
+            } else {
+                btnT.className = "px-3 py-1.5 rounded-lg bg-white shadow text-slate-800 font-bold";
+                btnP.className = "px-3 py-1.5 rounded-lg text-slate-600 hover:text-slate-900";
+                startTimer();
+            }
+        }
+
+        function startTimer() {
+            clearInterval(examState.timerInterval);
+            examState.secondsLeft = 1800; // 30 minutes
+            examState.timerInterval = setInterval(() => {
+                examState.secondsLeft--;
+                const mins = Math.floor(examState.secondsLeft / 60);
+                const secs = examState.secondsLeft % 60;
+                document.getElementById('timerDisplay').innerText = `${mins}:${secs < 10 ? '0' : ''}${secs}`;
+
+                if (examState.secondsLeft <= 0) {
+                    clearInterval(examState.timerInterval);
+                    alert("Time limit expired! Submitting exam results.");
+                }
+            }, 1000);
+        }
+
+        function renderQuestionGridPalette() {
+            const container = document.getElementById('questionGridPalette');
+            container.innerHTML = '';
+
+            dallahQuestions.forEach((q, idx) => {
+                const btn = document.createElement('button');
+                btn.className = `w-7 h-7 rounded-lg text-xs font-bold transition-all ${idx === examState.currentIdx ? 'bg-emerald-600 text-white ring-2 ring-emerald-400' : 'bg-white border text-slate-700 hover:bg-slate-100'}`;
+                btn.innerText = idx + 1;
+                btn.onclick = () => jumpToQuestion(idx);
+                btn.id = `palette-btn-${idx}`;
+                container.appendChild(btn);
+            });
+
+            document.getElementById('totalQNum').innerText = dallahQuestions.length;
+        }
+
+        function renderCurrentQuestion() {
+            const q = dallahQuestions[examState.currentIdx];
+            document.getElementById('currentQNum').innerText = examState.currentIdx + 1;
+            document.getElementById('qCategory').innerText = `Category: ${q.category}`;
+            document.getElementById('qText').innerText = q.text;
+
+            // Render Sign SVG Graphic
+            const signContainer = document.getElementById('qSignGraphic');
+            signContainer.innerHTML = `
+                <div class="w-24 h-24 rounded-2xl bg-slate-800 border-2 border-amber-400/40 flex flex-col items-center justify-center text-amber-400 shadow-inner p-2 text-center">
+                    <i class="fa-solid fa-triangle-exclamation text-3xl mb-1"></i>
+                    <span class="text-[9px] font-bold uppercase tracking-tighter">KSA Road Sign</span>
+                </div>
+            `;
+
+            // Render Option Buttons
+            const optionsBox = document.getElementById('optionsContainer');
+            optionsBox.innerHTML = '';
+
+            const answered = examState.userAnswers.hasOwnProperty(examState.currentIdx);
+            const selectedOpt = examState.userAnswers[examState.currentIdx];
+
+            q.options.forEach((optText, optIdx) => {
+                const btn = document.createElement('button');
+                btn.className = `w-full text-left p-3.5 rounded-xl border transition-all text-xs font-semibold flex items-center justify-between ${answered ? (optIdx === q.correct ? 'bg-emerald-800/80 border-emerald-500 text-white' : (optIdx === selectedOpt ? 'bg-red-900/80 border-red-500 text-white' : 'bg-slate-800/50 border-slate-700 text-slate-400')) : 'bg-slate-800 border-slate-700 text-slate-200 hover:bg-slate-700'}`;
+                
+                btn.innerHTML = `
+                    <span>${String.fromCharCode(65 + optIdx)}. ${optText}</span>
+                    ${answered && optIdx === q.correct ? '<i class="fa-solid fa-circle-check text-emerald-400 text-sm"></i>' : ''}
+                `;
+
+                btn.disabled = answered;
+                btn.onclick = () => selectOption(optIdx);
+                optionsBox.appendChild(btn);
+            });
+
+            // Explanation Banner
+            const expBanner = document.getElementById('explanationBanner');
+            if (answered) {
+                expBanner.classList.remove('hidden');
+                expBanner.className = `p-4 rounded-xl text-xs space-y-1 transition-all ${selectedOpt === q.correct ? 'bg-emerald-950 border border-emerald-800 text-emerald-200' : 'bg-red-950 border border-red-800 text-red-200'}`;
+                document.getElementById('explanationTitle').innerText = selectedOpt === q.correct ? "✓ Correct Answer!" : "✕ Incorrect Answer";
+                document.getElementById('explanationText').innerText = q.explanation;
+            } else {
+                expBanner.classList.add('hidden');
+            }
+
+            // Update Palette status
+            renderQuestionGridPalette();
+        }
+
+        function selectOption(optIdx) {
+            if (examState.userAnswers.hasOwnProperty(examState.currentIdx)) return;
+
+            examState.userAnswers[examState.currentIdx] = optIdx;
+            const q = dallahQuestions[examState.currentIdx];
+
+            if (optIdx === q.correct) {
+                examState.score++;
+            }
+
+            document.getElementById('scoreDisplay').innerText = `${examState.score} Correct`;
+            renderCurrentQuestion();
+        }
+
+        function jumpToQuestion(idx) {
+            examState.currentIdx = idx;
+            renderCurrentQuestion();
+        }
+
+        function prevQuestion() {
+            if (examState.currentIdx > 0) {
+                examState.currentIdx--;
+                renderCurrentQuestion();
+            }
+        }
+
+        function nextQuestion() {
+            if (examState.currentIdx < dallahQuestions.length - 1) {
+                examState.currentIdx++;
+                renderCurrentQuestion();
+            }
+        }
+
+        // Web Speech TTS Reader for Questions
+        function speakCurrentQuestion() {
+            const q = dallahQuestions[examState.currentIdx];
+            const lang = document.getElementById('ttsLang').value;
+
+            if ('speechSynthesis' in window) {
+                window.speechSynthesis.cancel();
+                const msg = new SpeechSynthesisUtterance(q.text);
+                msg.lang = lang === 'hi' ? 'hi-IN' : (lang === 'ur' ? 'ur-PK' : (lang === 'bn' ? 'bn-BD' : 'en-US'));
+                window.speechSynthesis.speak(msg);
+            }
+        }
+
+        // -------------------------------------------------------------
+        // SECTION 4: EOSB & Fuel Calculator Logic
+        // -------------------------------------------------------------
+        function calculateEOSB() {
+            const lawType = document.getElementById('eosbLawType').value;
+            const salary = parseFloat(document.getElementById('eosbSalary').value) || 0;
+            const years = parseInt(document.getElementById('eosbYears').value) || 0;
+            const months = parseInt(document.getElementById('eosbMonths').value) || 0;
+            const reason = document.getElementById('eosbReason').value;
+
+            const totalYears = years + (months / 12);
+            let eosbAmount = 0;
+            let noteText = '';
+
+            if (lawType === 'article22') {
+                // Article 22 Domestic Workers Law: 1 month salary for every 4 consecutive years
+                document.getElementById('eosbReasonContainer').style.display = 'none';
+                
+                const fourYearCycles = Math.floor(totalYears / 4);
+                eosbAmount = fourYearCycles * salary;
+                noteText = "Article 22 Rules: Domestic House Drivers are entitled to 1 full month salary for every 4 completed consecutive years of service. (0 SAR if service is under 4 years).";
+            } else {
+                // Article 84 Standard Labor Law
+                document.getElementById('eosbReasonContainer').style.display = 'block';
+
+                let baseEosb = 0;
+                if (totalYears <= 5) {
+                    baseEosb = totalYears * (salary * 0.5);
+                } else {
+                    baseEosb = (5 * (salary * 0.5)) + ((totalYears - 5) * salary);
+                }
+
+                // Resignation multipliers
+                if (reason === 'resignation') {
+                    if (totalYears < 2) {
+                        eosbAmount = 0;
+                    } else if (totalYears >= 2 && totalYears < 5) {
+                        eosbAmount = baseEosb * (1/3);
+                    } else if (totalYears >= 5 && totalYears < 10) {
+                        eosbAmount = baseEosb * (2/3);
+                    } else {
+                        eosbAmount = baseEosb;
+                    }
+                } else {
+                    eosbAmount = baseEosb;
+                }
+
+                noteText = "Article 84 Rules: Half month salary per year for first 5 years, full month per year thereafter.";
+            }
+
+            document.getElementById('eosbResultAmount').innerText = `${eosbAmount.toLocaleString(undefined, {minimumFractionDigits:2, maximumFractionDigits:2})} SAR`;
+            document.getElementById('eosbNote').innerText = noteText;
+        }
+
+        function calculateFuel() {
+            const fuelPrice = parseFloat(document.getElementById('fuelType').value) || 2.18;
+            const efficiency = parseFloat(document.getElementById('fuelEfficiency').value) || 10.0;
+            const distance = parseFloat(document.getElementById('fuelDistance').value) || 300;
+
+            document.getElementById('distanceValue').innerText = `${distance} km`;
+
+            const litersNeeded = distance / efficiency;
+            const tripCost = litersNeeded * fuelPrice;
+            const monthlyCost = tripCost * 30;
+
+            document.getElementById('fuelLiters').innerText = `${litersNeeded.toFixed(1)} L`;
+            document.getElementById('fuelTripCost').innerText = `${tripCost.toFixed(2)} SAR`;
+            document.getElementById('fuelMonthlyCost').innerText = `${monthlyCost.toLocaleString(undefined, {minimumFractionDigits:2, maximumFractionDigits:2})} SAR`;
+        }
+
+        // -------------------------------------------------------------
+        // SECTION 5: Survival Arabic Audio Soundboard Logic
+        // -------------------------------------------------------------
+        function renderArabicPhrases() {
+            const grid = document.getElementById('arabicPhraseGrid');
+            grid.innerHTML = '';
+
+            arabicPhrases.forEach((p, idx) => {
+                const cardHtml = `
+                    <div class="bg-white border border-slate-200 rounded-2xl p-4 shadow-sm hover:border-emerald-500 hover:shadow-md transition-all flex flex-col justify-between space-y-3">
+                        <div>
+                            <div class="flex justify-between items-center mb-1">
+                                <span class="text-[10px] font-bold uppercase text-slate-400 bg-slate-100 px-2 py-0.5 rounded">${p.cat}</span>
+                                <button onclick="playArabicAudio('${p.ar.replace(/'/g, "\\'")}')" class="w-8 h-8 rounded-full bg-emerald-600 hover:bg-emerald-500 text-white flex items-center justify-center transition-all shadow">
+                                    <i class="fa-solid fa-volume-high text-xs"></i>
+                                </button>
+                            </div>
+                            <h4 class="font-bold text-slate-800 text-sm mb-1">${p.title}</h4>
+                            <p class="arabic-text text-xl font-bold text-emerald-700 text-right my-2" dir="rtl">${p.ar}</p>
+                            <p class="text-xs font-semibold text-amber-700 italic">"${p.trans}"</p>
+                        </div>
+                        <div class="border-t pt-2 text-[11px] text-slate-500 flex justify-between items-center">
+                            <span>Meaning: <strong>${p.meaning}</strong></span>
+                        </div>
+                    </div>
+                `;
+                grid.innerHTML += cardHtml;
+            });
+        }
+
+        function playArabicAudio(text) {
+            if ('speechSynthesis' in window) {
+                window.speechSynthesis.cancel();
+                const msg = new SpeechSynthesisUtterance(text);
+                msg.lang = 'ar-SA';
+                msg.rate = 0.9;
+                window.speechSynthesis.speak(msg);
+            }
+        }
+    </script>
+</body>
+</html>
